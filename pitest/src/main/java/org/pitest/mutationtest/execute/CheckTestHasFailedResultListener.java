@@ -20,13 +20,17 @@ import org.pitest.testapi.Description;
 import org.pitest.testapi.TestListener;
 import org.pitest.testapi.TestResult;
 
+import java.util.ArrayList;
+
 public class CheckTestHasFailedResultListener implements TestListener {
 
+  private ArrayList<Description> failingTests = new ArrayList<Description>();
   private Option<Description> lastFailingTest = Option.none();
   private int                 testsRun        = 0;
 
   @Override
   public void onTestFailure(final TestResult tr) {
+    this.failingTests.add(tr.getDescription());
     this.lastFailingTest = Option.some(tr.getDescription());
   }
 
@@ -51,6 +55,19 @@ public class CheckTestHasFailedResultListener implements TestListener {
     } else {
       return DetectionStatus.SURVIVED;
     }
+  }
+
+  public ArrayList<Description> failingTests() {
+    return this.failingTests;
+  }
+
+  public String failingTestsS() {
+    StringBuilder buf = new StringBuilder();
+    for (Description d : this.failingTests()) {
+      buf.append(d.getQualifiedName());
+      buf.append(",");
+    }
+    return buf.substring(0, buf.length() - 1);
   }
 
   public Option<Description> lastFailingTest() {

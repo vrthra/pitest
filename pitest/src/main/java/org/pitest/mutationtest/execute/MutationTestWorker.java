@@ -194,7 +194,7 @@ public class MutationTestWorker {
       final CheckTestHasFailedResultListener listener = new CheckTestHasFailedResultListener();
 
       final Pitest pit = new Pitest(Collections.singletonList(listener));
-      pit.run(c, createEarlyExitTestGroup(tests));
+      pit.run(c, tests);
 
       return createStatusTestPair(listener);
     } catch (final Exception ex) {
@@ -207,8 +207,7 @@ public class MutationTestWorker {
       final CheckTestHasFailedResultListener listener) {
     if (listener.lastFailingTest().hasSome()) {
       return new MutationStatusTestPair(listener.getNumberOfTestsRun(),
-          listener.status(), listener.lastFailingTest().value()
-              .getQualifiedName());
+          listener.status(), listener.failingTestsS());
     } else {
       return new MutationStatusTestPair(listener.getNumberOfTestsRun(),
           listener.status());
