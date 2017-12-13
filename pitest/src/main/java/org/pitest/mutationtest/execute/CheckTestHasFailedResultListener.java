@@ -14,6 +14,9 @@
  */
 package org.pitest.mutationtest.execute;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pitest.functional.Option;
 import org.pitest.mutationtest.DetectionStatus;
 import org.pitest.testapi.Description;
@@ -22,11 +25,14 @@ import org.pitest.testapi.TestResult;
 
 public class CheckTestHasFailedResultListener implements TestListener {
 
+  private static final String TESTCASE_SEPARATOR = "|";
+  private List<Description> failingTests = new ArrayList<Description>();
   private Option<Description> lastFailingTest = Option.none();
   private int                 testsRun        = 0;
 
   @Override
   public void onTestFailure(final TestResult tr) {
+    this.failingTests.add(tr.getDescription());
     this.lastFailingTest = Option.some(tr.getDescription());
   }
 
@@ -52,6 +58,20 @@ public class CheckTestHasFailedResultListener implements TestListener {
       return DetectionStatus.SURVIVED;
     }
   }
+  
+
+  public List<Description> failingTests() {
+    return this.failingTests;
+  }
+
+  public String failingTestsString() {
+    StringBuilder builder = new StringBuilder();
+    for (Description d : this.failingTests()) {
+      builder.append(d.getQualifiedName());
+      builder.append(TESTCASE_SEPARATOR);
+    }
+    return builder.substring(0, builder.length() - TESTCASE_SEPARATOR.length());
+  } 
 
   public Option<Description> lastFailingTest() {
     return this.lastFailingTest;
