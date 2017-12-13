@@ -55,6 +55,14 @@ public class CheckTestHasFailedResultListenerTest {
   }
 
   @Test
+  public void shouldRecordDescriptionOfFailingTests() {
+    this.testee.onTestFailure(new TestResult(this.description, null));
+    java.util.ArrayList<Description> descriptions = new java.util.ArrayList<Description>();
+    descriptions.add(this.description);
+    assertEquals(descriptions, this.testee.failingTests());
+  }
+  
+  @Test
   public void shouldRecordNumberOfTestsRun() {
     assertEquals(0, this.testee.getNumberOfTestsRun());
     this.testee.onTestStart(null);
