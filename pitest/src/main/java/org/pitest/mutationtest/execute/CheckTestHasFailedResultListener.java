@@ -78,6 +78,10 @@ public class CheckTestHasFailedResultListener implements TestListener {
   }
 
   private String toTestsString(List<Description> descriptions) {
+    if (descriptions.isEmpty()) {
+      return "";
+    }
+
     StringBuilder builder = new StringBuilder();
     for (Description d : descriptions) {
       builder.append(d.getQualifiedName());
