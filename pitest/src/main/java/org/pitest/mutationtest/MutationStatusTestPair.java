@@ -21,16 +21,23 @@ public final class MutationStatusTestPair {
   private final int             numberOfTestsRun;
   private final DetectionStatus status;
   private final Option<String>  killingTest;
+  private final Option<String>  succeedingTest;
 
   public MutationStatusTestPair(final int numberOfTestsRun,
       final DetectionStatus status) {
-    this(numberOfTestsRun, status, null);
+    this(numberOfTestsRun, status, null, null);
   }
 
   public MutationStatusTestPair(final int numberOfTestsRun,
       final DetectionStatus status, final String killingTest) {
+    this(numberOfTestsRun, status, killingTest, null);
+  }
+
+  public MutationStatusTestPair(final int numberOfTestsRun,
+      final DetectionStatus status, final String killingTest, final String succeedingTest) {
     this.status = status;
     this.killingTest = Option.some(killingTest);
+    this.succeedingTest = Option.some(succeedingTest);
     this.numberOfTestsRun = numberOfTestsRun;
   }
 
@@ -40,6 +47,10 @@ public final class MutationStatusTestPair {
 
   public Option<String> getKillingTest() {
     return this.killingTest;
+  }
+
+  public Option<String> getSucceedingTest() {
+    return this.succeedingTest;
   }
 
   public int getNumberOfTestsRun() {
