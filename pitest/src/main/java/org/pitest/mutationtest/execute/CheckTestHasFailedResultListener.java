@@ -79,7 +79,7 @@ public class CheckTestHasFailedResultListener implements TestListener {
 
   private String toTestsString(List<Description> descriptions) {
     if (descriptions.isEmpty()) {
-      return "";
+      return null;
     }
 
     StringBuilder builder = new StringBuilder();
