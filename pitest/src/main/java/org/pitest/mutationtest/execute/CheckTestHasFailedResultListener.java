@@ -26,6 +26,7 @@ import org.pitest.testapi.TestResult;
 public class CheckTestHasFailedResultListener implements TestListener {
 
   private static final String TESTCASE_SEPARATOR = "|";
+  private List<Description> succeedingTests = new ArrayList<Description>();
   private List<Description> failingTests = new ArrayList<Description>();
   private Option<Description> lastFailingTest = Option.none();
   private int                 testsRun        = 0;
@@ -48,6 +49,7 @@ public class CheckTestHasFailedResultListener implements TestListener {
 
   @Override
   public void onTestSuccess(final TestResult tr) {
+    this.succeedingTests.add(tr.getDescription());
 
   }
 
@@ -59,14 +61,29 @@ public class CheckTestHasFailedResultListener implements TestListener {
     }
   }
   
+  public List<Description> succeedingTests() {
+    return succeedingTests;
+  }
 
   public List<Description> failingTests() {
     return this.failingTests;
   }
 
+  public String succeedingTestsString() {
+    return toTestsString(this.succeedingTests());
+  }
+
   public String failingTestsString() {
+    return toTestsString(this.failingTests());
+  }
+
+  private String toTestsString(List<Description> descriptions) {
+    if (descriptions.isEmpty()) {
+      return null;
+    }
+
     StringBuilder builder = new StringBuilder();
-    for (Description d : this.failingTests()) {
+    for (Description d : descriptions) {
       builder.append(d.getQualifiedName());
       builder.append(TESTCASE_SEPARATOR);
     }

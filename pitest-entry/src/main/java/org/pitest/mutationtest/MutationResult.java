@@ -36,6 +36,10 @@ public final class MutationResult {
     return this.status.getKillingTest();
   }
 
+  public Option<String> getSucceedingTest() {
+    return this.status.getSucceedingTest();
+  }
+
   public DetectionStatus getStatus() {
     return this.status.getStatus();
   }
